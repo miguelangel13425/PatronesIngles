@@ -6,6 +6,9 @@ from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from .models import Usuario
 from django.contrib.auth.decorators import user_passes_test
+from django.core.paginator import Paginator
+from django.db.models import Q
+from .forms import SolicitudExamenForm  # Asegúrate de importar tu formulario
 
 
 # views.py
@@ -16,8 +19,25 @@ def is_admin(user):
 @login_required
 @user_passes_test(is_admin)  
 def lista_usuarios(request):
-    usuarios = Usuario.objects.all()  # Obtiene todos los usuarios
-    return render(request, 'lista_usuarios.html', {'usuarios': usuarios})
+    query = request.GET.get('search', '')  # Obtener el término de búsqueda
+    usuarios = Usuario.objects.all()
+
+    # Filtrar los usuarios basados en el término de búsqueda
+    if query:
+        usuarios = usuarios.filter(
+            Q(first_name__icontains=query) |  # Ajusta esto según tu modelo
+            Q(last_name__icontains=query) |    # Ajusta esto según tu modelo
+            Q(numero_control__startswith=query) |  # Cambiado a startswith para número de control
+            Q(email__icontains=query)              # Búsqueda por correo electrónico
+
+        ).distinct()
+
+    # Paginación
+    paginator = Paginator(usuarios, 50)  # 50 usuarios por página
+    page_number = request.GET.get('page')  # Obtener el número de página de la URL
+    usuarios_page = paginator.get_page(page_number)
+
+    return render(request, 'lista_usuarios.html', {'usuarios': usuarios_page, 'search': query})
 
 @login_required
 @user_passes_test(is_admin) 
@@ -83,8 +103,36 @@ def iniciar_sesion(request):
 
 @login_required
 def seleccionar_examen(request):
+    # Obtener todos los exámenes
     examenes = Examen.objects.all()
-    return render(request, 'seleccionar_examen.html', {'examenes': examenes})
+
+    # Filtrar los exámenes que el usuario ya ha solicitado
+    examenes_disponibles = examenes.exclude(
+        id__in=SolicitudExamen.objects.filter(usuario=request.user).values_list('examen_id', flat=True)
+    )
+
+    if request.method == 'POST':
+        examen_id = request.POST.get('examen_id')
+        examen = Examen.objects.get(id=examen_id)
+        
+        # Crear la solicitud de examen
+        SolicitudExamen.objects.create(
+            usuario=request.user,
+            examen=examen,
+            estado_pago=False,  # Por defecto no está pagado
+            calificacion=0      # Por defecto la calificación es 0
+        )
+        
+        messages.success(request, 'Solicitud de examen creada correctamente.')
+        return redirect('seleccionar_examen')  # Redirigir a la misma página o a donde desees
+
+    return render(request, 'seleccionar_examen.html', {'examenes': examenes_disponibles})
+
+@login_required
+def solicitudes_vinculadas(request):
+    # Filtrar los exámenes por el usuario actual
+    solicitudes = SolicitudExamen.objects.filter(usuario=request.user)
+    return render(request, 'solicitudes_vinculadas.html', {'solicitudes': solicitudes})
 
 @login_required
 @user_passes_test(is_admin)
@@ -105,7 +153,6 @@ def index(request):
     return render(request, 'index.html')
 
 @login_required
-@user_passes_test(is_admin)
 def reservar_examen(request, examen_id):
     examen = get_object_or_404(Examen, id=examen_id)
     if request.method == 'POST':
@@ -119,13 +166,66 @@ def reservar_examen(request, examen_id):
 @login_required
 @user_passes_test(is_admin)
 def ver_solicitudes(request):
-    solicitudes = SolicitudExamen.objects.filter(usuario=request.user)
-    return render(request, 'ver_solicitudes.html', {'solicitudes': solicitudes})
+    query = request.GET.get('search', '')  # Obtener el término de búsqueda
+    estado_pago = request.GET.get('estado_pago', '')  # Obtener el estado de pago
+
+    solicitudes = SolicitudExamen.objects.all()
+
+    # Filtrar las solicitudes basadas en el término de búsqueda
+    if query:
+        solicitudes = solicitudes.filter(
+            Q(usuario__first_name__icontains=query) | 
+            Q(usuario__last_name__icontains=query) | 
+            Q(usuario__numero_control__startswith=query) | 
+            Q(calificacion__icontains=query)
+        ).distinct()
+
+    # Filtrar por estado de pago
+    if estado_pago in ['True', 'False']:
+        estado_pago_bool = estado_pago == 'True'
+        solicitudes = solicitudes.filter(estado_pago=estado_pago_bool)
+
+    # Paginación
+    paginator = Paginator(solicitudes, 50)  # 50 solicitudes por página
+    page_number = request.GET.get('page')  # Obtener el número de página de la URL
+    solicitudes_page = paginator.get_page(page_number)
+
+    return render(request, 'ver_solicitudes.html', {'solicitudes': solicitudes_page, 'search': query, 'estado_pago': estado_pago})
+
+
+@login_required
+@user_passes_test(is_admin)
+def agregar_solicitud(request):
+    if request.method == 'POST':
+        form = SolicitudExamenForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Solicitud de examen agregada correctamente.')
+            return redirect('lista_solicitudes')
+    else:
+        form = SolicitudExamenForm()
+    return render(request, 'agregar_solicitud.html', {'form': form})
+
+@login_required
+@user_passes_test(is_admin)
+def editar_solicitud(request, solicitud_id):
+    solicitud = get_object_or_404(SolicitudExamen, id=solicitud_id)
+
+    if request.method == 'POST':
+        form = SolicitudExamenForm(request.POST, instance=solicitud)  # Usa el formulario aquí
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Solicitud de examen actualizada correctamente.')
+            return redirect('ver_solicitudes')
+    else:
+        form = SolicitudExamenForm(instance=solicitud)  # Inicializa el formulario con la solicitud existente
+
+    return render(request, 'editar_solicitud.html', {'form': form, 'solicitud': solicitud})
 
 @login_required
 @user_passes_test(is_admin)
 def eliminar_solicitud(request, solicitud_id):
-    solicitud = get_object_or_404(SolicitudExamen, id=solicitud_id, usuario=request.user)
+    solicitud = get_object_or_404(SolicitudExamen, id=solicitud_id)
     solicitud.delete()
     messages.success(request, 'Solicitud de examen eliminada.')
     return redirect('ver_solicitudes')
@@ -161,5 +261,18 @@ def eliminar_examen(request, examen_id):
 @login_required
 @user_passes_test(is_admin)  
 def lista_examenes(request):
+    query = request.GET.get('search', '')  # Obtener el término de búsqueda
     examenes = Examen.objects.all()  # Obtiene todos los exámenes
-    return render(request, 'lista_examenes.html', {'examenes': examenes})
+
+    # Filtrar los exámenes basados en el término de búsqueda
+    if query:
+        examenes = examenes.filter(
+            Q(fecha__icontains=query)   # Ajusta esto según tu modelo (si es que tienes alguna descripción)
+        ).distinct()
+
+    # Paginación
+    paginator = Paginator(examenes, 50)  # 50 exámenes por página
+    page_number = request.GET.get('page')  # Obtener el número de página de la URL
+    examenes_page = paginator.get_page(page_number)
+
+    return render(request, 'lista_examenes.html', {'examenes': examenes_page, 'search': query})

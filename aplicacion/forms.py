@@ -7,8 +7,8 @@ from datetime import datetime
 class SolicitudExamenForm(forms.ModelForm):
     class Meta:
         model = SolicitudExamen
-        fields = ['estado_pago', 'calificacion']  # Campos que se mostrarán en el formulario
-
+        fields = ['usuario', 'examen', 'estado_pago', 'calificacion']
+        
         widgets = {
             'calificacion': forms.NumberInput(attrs={'min': 0, 'max': 100}),  # Validar calificación
         }

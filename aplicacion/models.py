@@ -28,7 +28,7 @@ class Examen(models.Model):
         return self.cupo - solicitudes
 
     def __str__(self):
-        return f'{self.fecha} (Cupo: {self.cupo}, Costo: ${self.costo})'
+        return f'{self.fecha}'
 
 
 class SolicitudExamen(models.Model):

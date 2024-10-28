@@ -1,0 +1,16 @@
+<!-- eliminar_solicitud.html -->
+{% extends 'base.html' %}
+
+{% block title %}Eliminar Solicitud{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Eliminar Solicitud</h2>
+    <p>¿Estás seguro de que deseas eliminar la solicitud para el examen: {{ solicitud.examen }}?</p>
+    <form method="POST">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Eliminar Solicitud</button>
+        <a href="{% url 'ver_solicitudes' %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock %}

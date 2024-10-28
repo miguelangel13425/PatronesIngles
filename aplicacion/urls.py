@@ -12,13 +12,18 @@ from .views import (
     eliminar_usuario,
     editar_examen,
     eliminar_examen,
-    lista_examenes
+    lista_examenes,
+    ver_solicitudes,
+    agregar_solicitud,
+    eliminar_solicitud,
+    editar_solicitud,
+    solicitudes_vinculadas
 )
 from django.contrib.auth.views import LogoutView
 
 urlpatterns = [
     path('iniciar_sesion/', iniciar_sesion, name='iniciar_sesion'),  
-    path('', iniciar_sesion, name='index'),
+    path('', lista_examenes, name='index'),
     path('seleccionar_examen/', seleccionar_examen, name='seleccionar_examen'),  
     path('agregar_examen/', agregar_examen, name='agregar_examen'),  
     path('logout/', LogoutView.as_view(next_page='iniciar_sesion'), name='logout'),
@@ -31,5 +36,10 @@ urlpatterns = [
     path('editar_examen/<int:examen_id>/', editar_examen, name='editar_examen'),
     path('eliminar_examen/<int:examen_id>/', eliminar_examen, name='eliminar_examen'),
     path('lista_examenes/', lista_examenes, name='lista_examenes'),
+    path('ver_solicitudes/', ver_solicitudes, name='ver_solicitudes'),
+    path('editar_solicitud/<int:solicitud_id>/', editar_solicitud, name='editar_solicitud'),
+    path('agregar_solicitud/', agregar_solicitud, name='agregar_solicitud'),
+    path('eliminar_solicitud/<int:solicitud_id>/', eliminar_solicitud, name='eliminar_solicitud'),
+    path('solicitudes_vinculadas', solicitudes_vinculadas, name='solicitudes_vinculadas'),
 
 ]

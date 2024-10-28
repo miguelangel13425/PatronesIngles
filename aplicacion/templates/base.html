@@ -20,9 +20,15 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="{% url 'lista_examenes' %}">Exámenes</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'ver_solicitudes' %}">Solicitudes</a>
+                            </li>
                         {% endif %}
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'seleccionar_examen' %}">Seleccionar Examen</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'solicitudes_vinculadas' %}">Mis examenes</a>
                         </li>
                         <!-- Botón de cierre de sesión -->
                         <form action="{% url 'logout' %}" method="post" class="nav-item">

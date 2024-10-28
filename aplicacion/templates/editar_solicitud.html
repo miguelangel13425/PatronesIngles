@@ -1,0 +1,16 @@
+<!-- editar_solicitud.html -->
+{% extends 'base.html' %}
+
+{% block title %}Editar Solicitud{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Editar Solicitud de Examen</h2>
+    <h3>Examen: {{ solicitud.examen }}</h3>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}  <!-- Muestra el formulario de forma automática -->
+        <button type="submit" class="btn btn-primary">Actualizar Solicitud</button>
+    </form>
+</div>
+{% endblock %}
