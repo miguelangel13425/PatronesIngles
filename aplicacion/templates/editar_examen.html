@@ -1,0 +1,16 @@
+<!-- editar_examen.html -->
+{% extends 'base.html' %}
+
+{% block title %}Editar Examen{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Editar Examen</h2>
+    <h1>{{examen.fecha}}</h1>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}  <!-- Muestra el formulario de forma automática -->
+        <button type="submit" class="btn btn-primary">Actualizar Examen</button>
+    </form>
+</div>
+{% endblock %}

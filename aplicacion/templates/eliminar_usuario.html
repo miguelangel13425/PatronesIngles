@@ -1,0 +1,21 @@
+<!-- eliminar_usuario.html -->
+{% extends 'base.html' %}
+
+{% block title %}Eliminar Usuario{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Eliminar Usuario: {{ usuario.username }}</h2>
+    <p>¿Estás seguro de que deseas eliminar este usuario?</p>
+    <form method="POST">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Eliminar</button>
+        <a href="{% url 'lista_usuarios' %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-success mt-2">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+</div>
+{% endblock %}

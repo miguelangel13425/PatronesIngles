@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Agregar Nueva Sesión de Examen</h1>
+    
+    <form method="post" class="border p-4 rounded shadow-sm">
+        {% csrf_token %}
+        <div class="mb-3">
+            {{ form.as_p }}
+        </div>
+        <button type="submit" class="btn btn-success btn-lg w-100">Agregar Examen</button>
+    </form>
+
+    {% if messages %}
+        <div class="mt-4">
+            <ul class="list-group">
+                {% for message in messages %}
+                    <li class="list-group-item list-group-item-info">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

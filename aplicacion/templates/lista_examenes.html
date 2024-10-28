@@ -1,0 +1,43 @@
+<!-- lista_examenes.html -->
+{% extends 'base.html' %}
+
+{% block title %}Lista de Exámenes{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Lista de Exámenes</h2>
+    <a href="{% url 'agregar_examen' %}" class="btn btn-primary mb-3">Agregar Examen</a>
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Cupo</th>
+                <th>Costo</th>
+                <th>Acciones</th>  <!-- Columna para botones de acción -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for examen in examenes %}
+            <tr>
+                <td>{{ examen.fecha }}</td>
+                <td>{{ examen.cupo }}</td>
+                <td>${{ examen.costo }}</td>
+                <td>
+                    <a href="{% url 'editar_examen' examen.id %}" class="btn btn-warning btn-sm">Editar</a>
+                    <form action="{% url 'eliminar_examen' examen.id %}" method="POST" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-danger mt-2">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+</div>
+{% endblock %}

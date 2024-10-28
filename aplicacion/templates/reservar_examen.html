@@ -1,0 +1,30 @@
+<!-- reservar_examen.html -->
+{% extends 'base.html' %}
+
+{% block title %}Reservar Examen{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Reservar Examen: {{ examen.nombre }}</h2>
+    <form method="POST">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="estado_pago" class="form-label">Estado de Pago</label>
+            <select class="form-select" id="estado_pago" name="estado_pago">
+                <option value="False">No Pagado</option>
+                <option value="True">Pagado</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="calificacion" class="form-label">Calificación</label>
+            <input type="number" class="form-control" id="calificacion" name="calificacion" min="0" max="100" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Reservar Examen</button>
+    </form>
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-danger mt-2">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+</div>
+{% endblock %}

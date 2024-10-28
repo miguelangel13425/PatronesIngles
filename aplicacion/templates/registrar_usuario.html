@@ -1,0 +1,43 @@
+<!-- registrar_usuario.html -->
+{% extends 'base.html' %}
+
+{% block title %}Registrar Usuario{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Registrar Usuario</h2>
+    <form method="POST">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="username" class="form-label">Nombre de usuario</label>
+            <input type="text" class="form-control" id="username" name="username" required>
+        </div>
+        <div class="mb-3">
+            <label for="first_name" class="form-label">Nombre</label>
+            <input type="text" class="form-control" id="first_name" name="first_name" required>
+        </div>
+        <div class="mb-3">
+            <label for="second_name" class="form-label">Apellido</label>
+            <input type="text" class="form-control" id="second_name" name="second_name" required>
+        </div>
+        <div class="mb-3">
+            <label for="email" class="form-label">Correo electrónico</label>
+            <input type="email" class="form-control" id="email" name="email" required>
+        </div>
+        <div class="mb-3">
+            <label for="numero_control" class="form-label">Número de Control</label>
+            <input type="text" class="form-control" id="numero_control" name="numero_control" required>
+        </div>
+        <div class="mb-3">
+            <label for="password" class="form-label">Contraseña</label>
+            <input type="password" class="form-control" id="password" name="password" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Registrar</button>
+    </form>
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-danger mt-2">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,20 @@
+<!-- editar_usuario.html -->
+{% extends 'base.html' %}
+
+{% block title %}Editar Usuario{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Editar Usuario: {{ usuario.username }}</h2>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Actualizar Usuario</button>
+    </form>
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-success mt-2">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+</div>
+{% endblock %}
