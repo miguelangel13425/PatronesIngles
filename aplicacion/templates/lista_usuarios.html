@@ -34,12 +34,19 @@
                 <td>{{ usuario.email }}</td>
                 <td>{{ usuario.is_active|yesno:"Sí,No" }}</td>  <!-- Mostrar 'Sí' o 'No' para el estado activo -->
                 <td>
-                    <a href="{% url 'editar_usuario' usuario.id %}" class="btn btn-warning btn-sm">Editar</a>
-                    <form action="{% url 'eliminar_usuario' usuario.id %}" method="POST" style="display:inline;">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
-                    </form>
+                    <div class="acciones-buttons">
+                        <a href="{% url 'editar_usuario' usuario.id %}" class="btn btn-warning btn-sm">
+                            <i class="fas fa-edit"></i> <!-- Icono de edición -->
+                        </a>
+                        <form action="{% url 'eliminar_usuario' usuario.id %}" method="POST" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger btn-sm">
+                                <i class="fas fa-trash-alt"></i> <!-- Icono de eliminar -->
+                            </button>
+                        </form>
+                    </div>
                 </td>
+             
             </tr>
             {% empty %}
             <tr>

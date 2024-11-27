@@ -4,7 +4,8 @@
 
 {% block content %}
 <div class="container">
-    <h2>Mis Solicitudes de Examen</h2>
+    
+    <h2>Solicitudes de Examen</h2>
 
     <form method="GET" class="mb-3">
         <input type="text" name="search" placeholder="Buscar..." value="{{ search }}" class="form-control mb-2" />
@@ -40,11 +41,17 @@
                 <td>{{ solicitud.fecha_solicitud }}</td>
                 <td>{{ solicitud.examen.fecha|date:"Y-m-d" }}</td>
                 <td>
-                    <a href="{% url 'editar_solicitud' solicitud.id %}" class="btn btn-warning btn-sm">Editar</a>
-                    <form action="{% url 'eliminar_solicitud' solicitud.id %}" method="POST" style="display:inline;">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
-                    </form>
+                    <div class="acciones-buttons">
+                        <a href="{% url 'editar_solicitud' solicitud.id %}" class="btn btn-warning btn-sm">
+                            <i class="fas fa-edit"></i> <!-- Icono de edición -->
+                        </a>
+                        <form action="{% url 'eliminar_solicitud' solicitud.id %}" method="POST" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger btn-sm">
+                                <i class="fas fa-trash-alt"></i> <!-- Icono de eliminar -->
+                            </button>
+                        </form>
+                    </div>
                 </td>
             </tr>
             {% empty %}

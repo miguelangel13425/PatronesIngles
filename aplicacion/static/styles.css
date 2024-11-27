@@ -1,29 +1,367 @@
-/* styles.css */
-
-/* Barra de navegación fija */
-.navbar {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    background-color: #333;  /* Cambia el color según prefieras */
+/* Global Styles */
+:root {
+    --primary-color: #3182ce;
+    --primary-dark: #2c5282;
+    --background-light: #f7fafc;
+    --background-dark: #1a202c;
+    --text-light: #2d3748;
+    --text-dark: #e2e8f0;
+    --accent-light: #63b3ed;
+    --accent-dark: #4299e1;
+    --success-color: #48bb78;
+    --error-color: #f56565;
+    --border-radius: 0.375rem;
+    --transition-speed: 0.3s;
+  }
+  
+  body {
+    font-family: 'Roboto', sans-serif;
+    background-color: var(--background-light);
+    color: var(--text-light);
+    margin: 0;
+    padding: 0;
+    transition: background-color var(--transition-speed) ease;
+  }
+  
+  /* Dark mode */
+  @media (prefers-color-scheme: dark) {
+    body {
+      background-color: var(--background-dark);
+      color: var(--text-dark);
+    }
+  }
+  
+  /* Layout */
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
     padding: 1rem;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    z-index: 1000;
-}
-
-.navbar a {
-    color: white;
-    text-decoration: none;
+  }
+  
+  /* Typography */
+  h1, h2, h3, h4, h5, h6 {
+    color: var(--primary-dark);
+    margin-bottom: 1rem;
+  }
+  
+  @media (prefers-color-scheme: dark) {
+    h1, h2, h3, h4, h5, h6 {
+      color: var(--accent-light);
+    }
+  }
+  
+  /* Navbar */
+  .navbar {
+    background-color: #ffffff;
     padding: 0.5rem 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  @media (prefers-color-scheme: dark) {
+    .navbar {
+      background-color: var(--background-dark);
+      box-shadow: 0 2px 4px rgba(255, 255, 255, 0.1);
+    }
+  }
+  
+  .navbar-nav {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .nav-link,
+  button.nav-link {
+    color: var(--text-light);
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius);
+    transition: all var(--transition-speed) ease;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+  }
+  
+  .nav-link:hover,
+  button.nav-link:hover {
+    background-color: var(--accent-light);
+    color: #ffffff;
+  }
+  
+  @media (prefers-color-scheme: dark) {
+    .nav-link,
+    button.nav-link {
+      color: var(--text-dark);
+    }
+  
+    .nav-link:hover,
+    button.nav-link:hover {
+      background-color: var(--accent-dark);
+    }
+  }
+  
+  .navbar-brand img {
+    height: 40px;
+    width: auto;
+    margin-right: 1rem;
+  }
+  
+  .Logo {
+    height: 80px;
+    width: auto;
+    display: inline-block;
+    vertical-align: middle;
+  }
+  
+  /* Buttons */
+  .btn {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    font-size: 1.0rem;
+    font-weight: bold;
+    color: #ffffff;
+    background-color: var(--primary-color);
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    transition: background-color var(--transition-speed) ease;
+  }
+  
+  .btn:hover {
+    background-color: var(--primary-dark);
+  }
+  
+  .btn:disabled {
+    background-color: #a0aec0;
+    cursor: not-allowed;
+  }
+  
+  /* Forms */
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  input,
+  select,
+  textarea {
+    width: 100%;
+    padding: 0.5rem;
+    font-size: 1rem;
+    border: 1px solid #cbd5e0;
+    border-radius: var(--border-radius);
+    background-color: #ffffff;
+    transition: border-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+  }
+  
+  input:focus,
+  select:focus,
+  textarea:focus {
+    border-color: var(--primary-color);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.1);
+  }
+  
+  @media (prefers-color-scheme: dark) {
+    input,
+    select,
+    textarea {
+      background-color: var(--background-dark);
+      border-color: #4a5568;
+      color: var(--text-dark);
+    }
+  
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--accent-light);
+      box-shadow: 0 0 0 3px rgba(99, 179, 237, 0.1);
+    }
+  }
+  
+  /* Tables */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1rem;
+    background-color: #ffffff;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+  }
+  
+  th,
+  td {
+    text-align: left;
+    padding: 0.75rem;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  
+  th {
+    background-color: var(--primary-dark);
+    color: #ffffff;
+    font-weight: bold;
+  }
+  
+  tr:nth-child(even) {
+    background-color: var(--background-light);
+  }
+  
+  @media (prefers-color-scheme: dark) {
+    table {
+      background-color: var(--background-dark);
+    }
+  
+    th {
+      background-color: var(--primary-color);
+    }
+  
+    td {
+      border-bottom-color: #4a5568;
+    }
+  
+    tr:nth-child(even) {
+      background-color: rgba(255, 255, 255, 0.05);
+    }
+  }
+  
+  /* Responsive design */
+  @media (max-width: 768px) {
+    .navbar-nav {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .nav-link,
+    button.nav-link {
+      width: 100%;
+      text-align: left;
+    }
+  
+    table {
+      font-size: 0.875rem;
+    }
+  
+    th,
+    td {
+      padding: 0.5rem;
+    }
+  }
+  
+  /* Utility classes */
+  .text-center {
+    text-align: center;
+  }
+  
+  .mt-1 { margin-top: 0.25rem; }
+  .mt-2 { margin-top: 0.5rem; }
+  .mt-4 { margin-top: 1rem; }
+  
+  .mb-1 { margin-bottom: 0.25rem; }
+  .mb-2 { margin-bottom: 0.5rem; }
+  .mb-4 { margin-bottom: 1rem; }
+  
+  .p-1 { padding: 0.25rem; }
+  .p-2 { padding: 0.5rem; }
+  .p-4 { padding: 1rem; }
+  
+  .rounded { border-radius: var(--border-radius); }
+  
+  .shadow {
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  }
+  
+  /* Animations */
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  .fade-in {
+    animation: fadeIn var(--transition-speed) ease-in;
+  }
+  
+  /* Accessibility */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+  
+  /* Print styles */
+  @media print {
+    body {
+      background-color: #ffffff;
+      color: #000000;
+    }
+  
+    .navbar,
+    .btn {
+      display: none;
+    }
+  
+    a {
+      text-decoration: none;
+      color: #000000;
+    }
+  
+    table {
+      border: 1px solid #000000;
+    }
+  
+    th,
+    td {
+      border-bottom: 1px solid #000000;
+    }
+  }
+  
+/* Asegúrate de que los botones no se superpongan */
+.solicitudes-buttons {
+    display: flex;
+    gap: 1rem; /* Espacio entre botones */
+    justify-content: center; /* Centra los botones horizontalmente */
+    flex-wrap: wrap; /* Permite que los botones se envuelvan en caso de que no quepan */
 }
 
-.navbar a:hover {
-    background-color: #555;  /* Color de fondo al pasar el mouse */
+.solicitudes-buttons button {
+    flex: 1 1 auto; /* Los botones se ajustarán al tamaño disponible */
+    max-width: 200px; /* Limita el tamaño máximo de los botones */
+    padding: 0.8rem 1.6rem; /* Asegura que los botones tengan un buen tamaño */
 }
 
-/* Espacio adicional para evitar que el contenido quede oculto detrás de la barra */
-.content {
-    margin-top: 80px;  /* Ajusta el valor según la altura de la barra */
+/* Si quieres un mejor control del diseño en dispositivos pequeños */
+@media (max-width: 768px) {
+    .solicitudes-buttons {
+        flex-direction: column; /* Los botones se apilarán en lugar de estar en fila */
+        align-items: center; /* Alinea los botones al centro */
+    }
+
+    .solicitudes-buttons button {
+        width: 100%; /* Los botones ocuparán todo el ancho en móviles */
+        margin-bottom: 1rem; /* Espaciado entre botones */
+    }
+}
+
+
+  
+
+/* Asegúrate de que el formulario ocupe todo el ancho disponible */
+form.w-100 {
+    width: 100%;
+    display: flex;
+    justify-content: center; /* Centra el botón dentro del formulario */
+}
+
+/* Si necesitas más control sobre el centrado */
+.d-flex.justify-content-center {
+    margin-top: 1rem; /* Espaciado entre botones */
 }

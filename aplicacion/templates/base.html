@@ -4,50 +4,63 @@
 <head>
     <!-- Otros elementos head -->
     <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="{% static '/styles.css' %}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
 </head>
 <body>
+    
     <!-- Barra de navegación -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container-fluid">
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
-                    {% if user.is_authenticated %}
-                        <!-- Opciones para usuarios autenticados -->
-                        {% if user.is_staff %}
-                            <li class="nav-item">
-                                <a class="nav-link" href="{% url 'lista_usuarios' %}">Usuarios</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{% url 'lista_examenes' %}">Exámenes</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{% url 'ver_solicitudes' %}">Solicitudes</a>
-                            </li>
-                        {% endif %}
+    <nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container-fluid">
+        <!-- Logo -->
+        <a class="navbar-brand" href="/">
+            <img src="{% static 'Logo.png' %}" alt="Logo" style="height: 80px; width: auto;">
+        </a>
+
+        <!-- Botones de navegación -->
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                {% if user.is_authenticated %}
+                    {% if user.is_staff %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'seleccionar_examen' %}">Seleccionar Examen</a>
+                            <a class="nav-link" href="{% url 'lista_usuarios' %}">Usuarios</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'solicitudes_vinculadas' %}">Mis examenes</a>
+                            <a class="nav-link" href="{% url 'lista_examenes' %}">Exámenes</a>
                         </li>
-                        <!-- Botón de cierre de sesión -->
-                        <form action="{% url 'logout' %}" method="post" class="nav-item">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'ver_solicitudes' %}">Solicitudes</a>
+                        </li>
+                    {% endif %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'seleccionar_examen' %}">Seleccionar Examen</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'solicitudes_vinculadas' %}">Mis Exámenes</a>
+                    </li>
+                    
+                    <div class="d-flex justify-content-center flex-grow-1">
+                        <form action="{% url 'logout' %}" method="post">
                             {% csrf_token %}
                             <button type="submit" class="btn btn-link nav-link">Cerrar sesión</button>
                         </form>
-                    {% else %}
-                        <!-- Opciones para usuarios no autenticados -->
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'iniciar_sesion' %}">Iniciar Sesión</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'registrar_usuario' %}">Registrarse</a>
-                        </li>
-                    {% endif %}
-                </ul>
-            </div>
+                    </div>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'iniciar_sesion' %}">Iniciar Sesión</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'registrar_usuario' %}">Registrarse</a>
+                    </li>
+                {% endif %}
+            </ul>
         </div>
-    </nav>
+    </div>
+</nav>
+
+    
+    
 
     <!-- Contenido de la página -->
     <div class="container mt-4">
