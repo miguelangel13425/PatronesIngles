@@ -9,7 +9,19 @@
     <h3>Examen: {{ solicitud.examen }}</h3>
     <form method="POST">
         {% csrf_token %}
-        {{ form.as_p }}  <!-- Muestra el formulario de forma automática -->
+
+        <!-- Campo Calificación (editable) -->
+        <div class="form-group">
+            <label for="calificacion">Calificación</label>
+            <input type="number" id="calificacion" name="calificacion" value="{{ solicitud.calificacion }}" min="0" max="100" class="form-control">
+        </div>
+
+        <!-- Campo Estado de Pago (editable) -->
+        <div class="form-group">
+            <label for="estado_pago">Estado de Pago</label>
+            <input type="checkbox" id="estado_pago" name="estado_pago" {% if solicitud.estado_pago %}checked{% endif %}>
+        </div>
+        
         <button type="submit" class="btn btn-primary">Actualizar Solicitud</button>
     </form>
 </div>

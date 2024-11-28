@@ -24,11 +24,12 @@ def lista_usuarios(request):
 
     if query:
         usuarios = usuarios.filter(
-            Q(first_name__icontains=query) |
-            Q(last_name__icontains=query) |
-            Q(numero_control__startswith=query) |
-            Q(email__icontains=query)
+        Q(first_name__startswith=query) |  # Busca al inicio del nombre
+        Q(last_name__startswith=query) |   # Busca al inicio del apellido
+        Q(numero_control__startswith=query) |  # Busca al inicio del número de control
+        Q(email__startswith=query)  # Busca al inicio del email
         ).distinct()
+
 
     paginator = Paginator(usuarios, 50)
     page_number = request.GET.get('page')
@@ -128,7 +129,24 @@ def seleccionar_examen(request):
 @login_required
 def solicitudes_vinculadas(request):
     solicitudes = SolicitudExamen.objects.filter(usuario=request.user)
-    return render(request, 'solicitudes_vinculadas.html', {'solicitudes': solicitudes})
+
+ # Filtrado por búsqueda
+    search = request.GET.get('search', '')
+    if search:
+        solicitudes = solicitudes.filter(
+            Q(calificacion__startswith=search) # Filtrar por calificación (si es necesario)
+
+        )
+    # Obtener el valor de 'estado_pago' desde la URL
+    estado_pago = request.GET.get('estado_pago', '')
+
+    # Filtrar por estado de pago si se ha seleccionado una opción
+    if estado_pago in ['True', 'False']:
+        estado_pago_bool = estado_pago == 'True'
+        solicitudes = solicitudes.filter(estado_pago=estado_pago_bool)
+
+    return render(request, 'solicitudes_vinculadas.html', {'solicitudes': solicitudes, 'estado_pago': estado_pago})
+
 
 
 @login_required
@@ -172,11 +190,12 @@ def ver_solicitudes(request):
 
     if query:
         solicitudes = solicitudes.filter(
-            Q(usuario__first_name__icontains=query) |
-            Q(usuario__last_name__icontains=query) |
-            Q(usuario__numero_control__startswith=query) |
-            Q(calificacion__icontains=query)
-        ).distinct()
+        Q(usuario__first_name__startswith=query) |  # Busca al inicio del nombre
+        Q(usuario__last_name__startswith=query) |   # Busca al inicio del apellido
+        Q(usuario__numero_control__startswith=query) |  # Busca al inicio del número de control
+        Q(calificacion__startswith=query)  # Busca al inicio de la calificación
+    ).distinct()
+
 
     if estado_pago in ['True', 'False']:
         estado_pago_bool = estado_pago == 'True'
@@ -207,17 +226,20 @@ def agregar_solicitud(request):
 @user_passes_test(is_admin)
 def editar_solicitud(request, solicitud_id):
     solicitud = get_object_or_404(SolicitudExamen, id=solicitud_id)
-
+    
     if request.method == 'POST':
+        # Procesar los datos del formulario
         form = SolicitudExamenForm(request.POST, instance=solicitud)
+        
         if form.is_valid():
+            # Guardar el formulario si es válido
             form.save()
-            messages.success(request, 'Solicitud de examen actualizada correctamente.')
-            return redirect('ver_solicitudes')
+            return redirect('ver_solicitudes')  # Redirige a la vista que deseas
     else:
         form = SolicitudExamenForm(instance=solicitud)
-
+    
     return render(request, 'editar_solicitud.html', {'form': form, 'solicitud': solicitud})
+
 
 
 @login_required
@@ -266,10 +288,11 @@ def lista_examenes(request):
 
     if query:
         examenes = examenes.filter(
-            Q(fecha__date__icontains=query) | 
-            Q(costo__icontains=query) | 
-            Q(cupo__icontains=query)
-        ).distinct()
+        Q(fecha__date__startswith=query) |  # Busca al inicio de la fecha
+        Q(costo__startswith=query) |  # Busca al inicio del costo
+        Q(cupo__startswith=query)  # Busca al inicio del cupo
+    ).distinct()
+
 
     paginator = Paginator(examenes, 50)
     page_number = request.GET.get('page')

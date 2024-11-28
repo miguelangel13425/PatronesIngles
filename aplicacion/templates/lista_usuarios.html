@@ -8,7 +8,7 @@
     <h2>Lista de Usuarios</h2>
 
     <form method="GET" class="mb-3">
-        <input type="text" name="search" placeholder="Buscar usuarios..." value="{{ search }}" class="form-control" />
+        <input type="text" name="search" placeholder="Buscar usuarios por nombre, apellido, correo o numero de control..." value="{{ search }}" class="form-control" />
         <button type="submit" class="btn btn-primary mt-2">Buscar</button>
     </form>
 
@@ -32,7 +32,7 @@
                 <td>{{ usuario.first_name }}</td>
                 <td>{{ usuario.last_name }}</td>
                 <td>{{ usuario.email }}</td>
-                <td>{{ usuario.is_active|yesno:"Sí,No" }}</td>  <!-- Mostrar 'Sí' o 'No' para el estado activo -->
+                <td class="status">{{ usuario.is_active|yesno:"Sí,No" }}</td>  <!-- Mostrar 'Sí' o 'No' para el estado activo -->
                 <td>
                     <div class="acciones-buttons">
                         <a href="{% url 'editar_usuario' usuario.id %}" class="btn btn-warning btn-sm">

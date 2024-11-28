@@ -7,11 +7,8 @@ from datetime import datetime
 class SolicitudExamenForm(forms.ModelForm):
     class Meta:
         model = SolicitudExamen
-        fields = ['usuario', 'examen', 'estado_pago', 'calificacion']
-        
-        widgets = {
-            'calificacion': forms.NumberInput(attrs={'min': 0, 'max': 100}),  # Validar calificación
-        }
+        fields = ['calificacion', 'estado_pago']  # Los campos que deseas permitir editar
+
 
 
 class UsuarioForm(forms.ModelForm):

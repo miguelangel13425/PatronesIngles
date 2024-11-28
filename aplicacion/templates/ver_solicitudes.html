@@ -8,7 +8,7 @@
     <h2>Solicitudes de Examen</h2>
 
     <form method="GET" class="mb-3">
-        <input type="text" name="search" placeholder="Buscar..." value="{{ search }}" class="form-control mb-2" />
+        <input type="text" name="search" placeholder="Buscar por nombre, apellido, numero de control y calificacion..." value="{{ search }}" class="form-control mb-2" />
         <button type="submit" class="btn btn-primary">Buscar</button>
     </form>
 
@@ -52,6 +52,7 @@
                             </button>
                         </form>
                     </div>
+                    
                 </td>
             </tr>
             {% empty %}
